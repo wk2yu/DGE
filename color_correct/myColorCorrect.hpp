@@ -1,8 +1,8 @@
-#ifndef COLOR_CORRECT_HPP
-#define COLOR_CORRECT_HPP
+#ifndef MYCOLORCORRECT_HPP
+#define MYCOLORCORRECT_HPP
 #include <opencv2/opencv.hpp>
 
-class ColorCorrect
+class myColorCorrect
 {
 public:
     cv::Mat run(const cv::Mat &src);
