@@ -1,11 +1,11 @@
 #include <opencv2/opencv.hpp>
 #include <iostream>
 
-class MyCamera
+class myCamera
 {
 public:
-    MyCamera();
-    ~MyCamera();
+    myCamera();
+    ~myCamera();
     bool read(cv::Mat &frame);
 
 private:
@@ -13,23 +13,21 @@ private:
     bool is_open_;
 };
 
-MyCamera::MyCamera()
+myCamera::myCamera()
 {
 #ifdef _WIN32
-    // Windows 平台使用 DSHOW
-    cap_.open(0, cv::CAP_DSHOW);
+    cap_.open(0);
 #else
-    // Linux / Ubuntu 平台
     cap_.open(0);
 #endif
     is_open_ = cap_.isOpened();
     if (!is_open_)
     {
-        std::cerr << "摄像头打开失败！" << std::endl;
+        std::cerr << "camera open failed!" << std::endl;
     }
 }
 
-MyCamera::~MyCamera()
+myCamera::~myCamera()
 {
     if (is_open_)
     {
@@ -37,7 +35,7 @@ MyCamera::~MyCamera()
     }
 }
 
-bool MyCamera::read(cv::Mat &frame)
+bool myCamera::read(cv::Mat &frame)
 {
     if (!is_open_)
         return false;
@@ -46,17 +44,16 @@ bool MyCamera::read(cv::Mat &frame)
 
 int main()
 {
-    MyCamera cam;
+    myCamera cam;
     cv::Mat frame;
-
-    while (cam.read(frame))
+    while (true)
     {
-        cv::imshow("Task1 Cross Platform Camera", frame);
-        int key = cv::waitKey(1);
-        if (key == 27) // ESC 退出
-        {
+        if (!cam.read(frame))
             break;
-        }
+        cv::imshow("io camera", frame);
+        int key = cv::waitKey(30);
+        if (key == 27)
+            break;
     }
     cv::destroyAllWindows();
     return 0;
